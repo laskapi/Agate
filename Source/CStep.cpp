@@ -46,14 +46,14 @@ void CStep::paint(juce::Graphics& g)
 	g.drawRect(getLocalBounds(), 1);   // draw an outline around the component
 
 	g.setColour(juce::Colours::white);
+	
 	g.setFont(14.0f);
 
-	int val = getValue() * 100;
+	double val = getValue() *100;
 	//double whole;
 	//double fraction = std::modf(val, &whole);
-	DBG("val"<<val);
-	int v = val;
-	g.drawText(std::to_string(v), getLocalBounds(),
+	int rounded = round(val);
+	g.drawText(std::to_string(rounded)+"%", getLocalBounds(),
 	juce::Justification::centred, true);   
 	
 }
