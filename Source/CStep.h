@@ -26,7 +26,9 @@ public:
     void paint (juce::Graphics&) override;
   //  void resized() override;
     void setResolution(int res);
+    
 private:
+    void mouseDown(const MouseEvent&) override;
     Laf mLaf;
    // ToggleButton step;
  //   Slider step;

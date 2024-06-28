@@ -24,6 +24,7 @@ CStep::CStep(double val,int resolution,String id, Slider::Listener& listener)
 		
 	addListener(&listener);
 	
+
 	//step.setToggleState((int)val, false);
 
 	//addAndMakeVisible(step);
@@ -37,6 +38,8 @@ CStep::~CStep()
 	
 
 }
+
+
 
 void CStep::paint(juce::Graphics& g)
 {
@@ -75,4 +78,15 @@ void CStep::setResolution(int res)
 	setRange(0.0,1.0, interval);
 	setValue(val* interval);
 	repaint();
+}
+
+void CStep::mouseDown(const MouseEvent& m)
+{
+	if (getInterval() == 1) {
+		int value = getValue() + 1;
+		setValue(value % 2);
+	}
+	else {
+		Slider::mouseDown(m);
+	}
 }
