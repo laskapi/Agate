@@ -137,7 +137,13 @@ bool AgateAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) con
 
 void AgateAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-	
+
+	/*for (auto i = 0; i < buffer.getNumChannels();i++) {
+		auto range = buffer.findMinMax(i, 0, buffer.getNumSamples());
+		DBG("before channel:: "<<i<< " min::" << range.getStart() << " max::" << range.getEnd());
+
+	}*/
+
 	juce::ScopedNoDenormals noDenormals;
 
 	auto totalNumInputChannels = getTotalNumInputChannels();
@@ -148,7 +154,6 @@ void AgateAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
 
 
 	if (model.isEmpty()) {
-		DBG("ret");
 		return;
 	}
 
@@ -167,23 +172,26 @@ void AgateAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
 	}
 
 
-
 	while (freeBuffer > 0) {
 	
-		if (currentTransitionTime > 0) {
+	/*	if (currentTransitionTime > 0) {
 			samples2modifyNow = std::min(currentTransitionTime, freeBuffer);
 			buffer.applyGainRamp(bufferWriteOffset, samples2modifyNow, lastStepVal, model.getValue(currentStep));
 			currentTransitionTime -= samples2modifyNow;
-		}
-				
-		else{
+		}*/
+		//else{
 			samples2modifyNow = std::min(samples2modify, (long)freeBuffer);
 			buffer.applyGain(bufferWriteOffset, samples2modifyNow, model.getValue(currentStep));
-		}
+		//}
+
 
 		samples2modify -= samples2modifyNow;
 		bufferWriteOffset += samples2modifyNow;
-		freeBuffer -= bufferWriteOffset;
+		freeBuffer -= samples2modifyNow;
+		if (samples2modify == 0) {
+			currentStep = ++currentStep % model.size();
+			samples2modify = sampleRate / model.size();
+		}
 		
 	}
 	

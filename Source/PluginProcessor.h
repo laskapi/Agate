@@ -65,7 +65,7 @@ private:
     float lastStepVal=0;
     int currentStep = model.size()-1;
 
-    int transitionTimeInSamples = 100;
+    int transitionTimeInSamples = 1000;
     int currentTransitionTime = 0;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AgateAudioProcessor)
